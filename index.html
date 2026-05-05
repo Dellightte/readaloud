@@ -8,536 +8,217 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --ink: #1a1410;
-    --paper: #f7f3ed;
-    --paper2: #ede8e0;
-    --paper3: #e2dbd0;
-    --amber: #c97d2a;
-    --amber-light: #f5e6c8;
-    --amber-dark: #8a5518;
-    --green: #2d6a4f;
-    --green-light: #d8f3dc;
-    --red: #9b2335;
-    --red-light: #fce4e8;
-    --muted: #7a6e60;
-    --border: rgba(26,20,16,0.15);
-    --shadow: 0 2px 20px rgba(26,20,16,0.08);
+    --ink: #1a1410; --paper: #f7f3ed; --paper2: #ede8e0; --paper3: #e2dbd0;
+    --amber: #c97d2a; --amber-light: #f5e6c8; --amber-dark: #8a5518;
+    --green: #2d6a4f; --green-light: #d8f3dc; --red: #9b2335; --red-light: #fce4e8;
+    --muted: #7a6e60; --border: rgba(26,20,16,0.15); --shadow: 0 2px 20px rgba(26,20,16,0.08);
   }
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* ── Header ── */
-  .header {
-    width: 100%;
-    max-width: 780px;
-    padding: 2rem 1.5rem 0;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: -0.5px;
-  }
-
+  .header { width: 100%; max-width: 820px; padding: 2rem 1.5rem 0; display: flex; align-items: baseline; gap: 12px; }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--ink); letter-spacing: -0.5px; }
   .logo span { color: var(--amber); }
+  .tagline { font-size: 12px; color: var(--muted); font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; }
 
-  .tagline {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
+  .app { width: 100%; max-width: 820px; padding: 1.5rem; display: flex; flex-direction: column; gap: 16px; }
 
-  /* ── Main layout ── */
-  .app {
-    width: 100%;
-    max-width: 780px;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: var(--shadow); }
+  .card-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 
-  /* ── Cards ── */
-  .card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    box-shadow: var(--shadow);
-  }
-
-  .card-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
-  /* ── Setup panel ── */
+  /* ── Setup ── */
   #setup-panel { display: flex; flex-direction: column; gap: 14px; }
 
-  textarea#book-text {
-    width: 100%;
-    min-height: 180px;
-    padding: 14px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    line-height: 1.7;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--paper);
-    color: var(--ink);
-    resize: vertical;
-    transition: border-color 0.2s;
+  .file-zone {
+    border: 2px dashed var(--border); border-radius: 10px; padding: 2.5rem 1.5rem;
+    text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: var(--paper);
   }
+  .file-zone:hover, .file-zone.drag { border-color: var(--amber); background: var(--amber-light); }
+  .file-zone .fz-icon { font-size: 32px; margin-bottom: 10px; }
+  .file-zone h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .file-zone p { font-size: 13px; color: var(--muted); }
+  .file-zone .file-types { font-size: 11px; color: var(--muted); margin-top: 8px; letter-spacing: 0.05em; }
+  #file-input { display: none; }
 
+  .or-divider { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
+  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  textarea#book-text {
+    width: 100%; min-height: 160px; padding: 14px;
+    font-family: 'Cormorant Garamond', serif; font-size: 17px; line-height: 1.7;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--paper); color: var(--ink); resize: vertical; transition: border-color 0.2s;
+  }
   textarea#book-text:focus { outline: none; border-color: var(--amber); }
   textarea#book-text::placeholder { color: var(--muted); font-style: italic; }
 
-  .controls-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+  .loaded-banner {
+    display: none; align-items: center; gap: 10px; padding: 10px 14px;
+    background: var(--green-light); border: 1px solid var(--green); border-radius: 8px;
+    font-size: 13px; color: var(--green);
   }
+  .loaded-banner.show { display: flex; }
 
-  .ctrl label {
-    display: block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 5px;
-  }
-
+  .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ctrl label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
   .ctrl select {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    appearance: none;
+    width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px;
+    cursor: pointer; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a6e60'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 28px;
+    background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
   }
-
   .ctrl select:focus { outline: none; border-color: var(--amber); }
 
-  /* Interval control */
-  .interval-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .toggle-row { display: flex; align-items: center; gap: 10px; }
+  .toggle-row label { font-size: 13px; color: var(--ink); cursor: pointer; user-select: none; }
+  .toggle {
+    position: relative; width: 38px; height: 22px; background: var(--paper3);
+    border-radius: 11px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; border: 1px solid var(--border);
   }
-
-  .interval-row label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    white-space: nowrap;
+  .toggle.on { background: var(--amber); border-color: var(--amber); }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+    border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
+  .toggle.on::after { transform: translateX(16px); }
 
-  input[type=range] {
-    flex: 1;
-    accent-color: var(--amber);
-    cursor: pointer;
-  }
-
-  .interval-val {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--amber-dark);
-    min-width: 80px;
-    text-align: right;
-  }
-
-  /* ── Buttons ── */
   .btn-primary {
-    padding: 11px 24px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    background: var(--amber);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    letter-spacing: 0.02em;
+    padding: 11px 24px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    background: var(--amber); color: #fff; border: none; border-radius: 8px; cursor: pointer;
+    transition: background 0.15s, transform 0.1s; letter-spacing: 0.02em;
   }
-
   .btn-primary:hover { background: var(--amber-dark); }
   .btn-primary:active { transform: scale(0.97); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .btn-ghost {
-    padding: 9px 18px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    background: transparent; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; transition: background 0.15s, color 0.15s;
   }
-
   .btn-ghost:hover { background: var(--paper2); color: var(--ink); }
 
-  /* ── Player panel ── */
+  /* ── Player ── */
   #player-panel { display: none; flex-direction: column; gap: 16px; }
 
+  .chapter-header {
+    font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600;
+    color: var(--amber-dark); letter-spacing: 0.05em; text-transform: uppercase;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+
   .book-display {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 19px;
-    line-height: 1.8;
-    color: var(--ink);
-    min-height: 120px;
-    max-height: 220px;
-    overflow-y: auto;
-    padding-right: 8px;
-    scrollbar-width: thin;
+    font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.85;
+    color: var(--ink); min-height: 140px; max-height: 260px; overflow-y: auto;
+    padding-right: 8px; scrollbar-width: thin;
+  }
+  .book-display .word { border-radius: 3px; padding: 0 1px; }
+  .book-display.highlights .word.spoken { color: var(--muted); }
+  .book-display.highlights .word.current { background: var(--amber-light); color: var(--amber-dark); font-weight: 600; }
+
+  .progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .progress-bar-bg { height: 6px; background: var(--paper2); border-radius: 3px; position: relative; }
+  .progress-bar-fill { height: 6px; background: var(--amber); border-radius: 3px; transition: width 0.5s; }
+  .chapter-tick {
+    position: absolute; top: -3px; width: 2px; height: 12px;
+    background: var(--muted); opacity: 0.35; border-radius: 1px; transform: translateX(-50%);
+  }
+  .quiz-dot {
+    position: absolute; top: -3px; width: 12px; height: 12px;
+    border-radius: 50%; background: var(--amber-dark); border: 2px solid #fff; transform: translateX(-50%);
   }
 
-  .book-display .word { transition: background 0.1s; border-radius: 3px; padding: 0 1px; }
-  .book-display .word.spoken { color: var(--muted); }
-  .book-display .word.current {
-    background: var(--amber-light);
-    color: var(--amber-dark);
-    font-weight: 600;
+  .diff-badge {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+    border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; transition: background 0.4s, color 0.4s;
   }
+  .diff-badge.easy { background: var(--green-light); color: var(--green); }
+  .diff-badge.medium { background: var(--amber-light); color: var(--amber-dark); }
+  .diff-badge.hard { background: var(--red-light); color: var(--red); }
 
-  /* Progress bar */
-  .progress-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .stats-row { display: flex; gap: 10px; }
+  .stat-chip { flex: 1; background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; }
+  .stat-chip .num { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--ink); }
+  .stat-chip .lbl { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
 
-  .progress-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .progress-bar-bg {
-    height: 5px;
-    background: var(--paper2);
-    border-radius: 3px;
-    position: relative;
-    cursor: pointer;
-  }
-
-  .progress-bar-fill {
-    height: 5px;
-    background: var(--amber);
-    border-radius: 3px;
-    transition: width 0.4s;
-    position: relative;
-  }
-
-  .quiz-marker {
-    position: absolute;
-    top: -2px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--amber-dark);
-    transform: translateX(-50%);
-    border: 2px solid #fff;
-  }
-
-  /* Playback controls */
-  .playback-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-  }
-
+  .playback-controls { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .btn-icon {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 15px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s;
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--paper); color: var(--ink); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background 0.15s;
   }
-
   .btn-icon:hover { background: var(--paper2); }
-
   .btn-play-main {
-    width: 54px; height: 54px;
-    border-radius: 50%;
-    border: none;
-    background: var(--amber);
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(201,125,42,0.35);
-    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--amber);
+    color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(201,125,42,0.35); transition: background 0.15s, transform 0.1s;
   }
-
-  .btn-play-main:hover { background: var(--amber-dark); box-shadow: 0 4px 18px rgba(201,125,42,0.5); }
+  .btn-play-main:hover { background: var(--amber-dark); }
   .btn-play-main:active { transform: scale(0.95); }
-
   .speed-badge {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s;
+    font-size: 11px; font-weight: 500; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 10px; cursor: pointer; user-select: none; transition: background 0.15s;
   }
-
   .speed-badge:hover { background: var(--paper2); }
 
-  /* Stats row */
-  .stats-row {
-    display: flex;
-    gap: 10px;
-  }
+  .status-bar { font-size: 12px; color: var(--muted); text-align: center; min-height: 18px; }
 
-  .stat-chip {
-    flex: 1;
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    text-align: center;
-  }
-
-  .stat-chip .num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  .stat-chip .lbl {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  /* ── Quiz overlay ── */
+  /* ── Quiz Overlay ── */
   #quiz-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,20,16,0.55);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    animation: fadeIn 0.25s ease;
+    display: none; position: fixed; inset: 0; background: rgba(26,20,16,0.6);
+    z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;
   }
-
+  #quiz-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  #quiz-overlay.active { display: flex; }
-
   .quiz-box {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2rem;
-    max-width: 520px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(26,20,16,0.25);
-    animation: slideUp 0.3s ease;
+    background: #fff; border-radius: 16px; padding: 2rem; max-width: 540px; width: 100%;
+    box-shadow: 0 20px 60px rgba(26,20,16,0.25); animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;
   }
+  .quiz-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+  .quiz-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .quiz-badge.easy { background: var(--green-light); color: var(--green); }
+  .quiz-badge.medium { background: var(--amber-light); color: var(--amber-dark); }
+  .quiz-badge.hard { background: var(--red-light); color: var(--red); }
+  .quiz-num { font-size: 12px; color: var(--muted); margin-left: auto; }
+  .diff-trend { font-size: 11px; color: var(--muted); font-style: italic; }
 
-  .quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.25rem;
-  }
-
-  .quiz-badge {
-    background: var(--amber-light);
-    color: var(--amber-dark);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 20px;
-  }
-
-  .quiz-num {
-    font-size: 12px;
-    color: var(--muted);
-    margin-left: auto;
-  }
-
-  .quiz-question {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 21px;
-    line-height: 1.5;
-    color: var(--ink);
-    margin-bottom: 1.25rem;
-  }
-
-  .quiz-options {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 1.25rem;
-  }
-
+  .quiz-question { font-family: 'Cormorant Garamond', serif; font-size: 21px; line-height: 1.5; color: var(--ink); margin-bottom: 1.25rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
   .quiz-option {
-    padding: 11px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    text-align: left;
-    background: var(--paper);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--ink);
+    padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s; text-align: left;
+    background: var(--paper); font-family: 'DM Sans', sans-serif; color: var(--ink);
   }
-
   .quiz-option:hover:not(:disabled) { border-color: var(--amber); background: var(--amber-light); }
   .quiz-option.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
   .quiz-option.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
   .quiz-option:disabled { cursor: default; }
+  .quiz-feedback { font-size: 14px; line-height: 1.6; color: var(--muted); min-height: 20px; margin-bottom: 1rem; font-style: italic; }
+  .quiz-footer { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
 
-  .quiz-feedback {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--muted);
-    min-height: 20px;
-    margin-bottom: 1rem;
-    font-style: italic;
-  }
-
-  .quiz-footer {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-
-  /* ── Generating state ── */
-  .generating {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--muted);
-    font-size: 14px;
-    padding: 1.5rem 0;
-    justify-content: center;
-  }
-
-  .dot-spin {
-    display: flex; gap: 4px;
-  }
-
-  .dot-spin span {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--amber);
-    animation: bounce 0.9s infinite;
-  }
-
+  .generating { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; padding: 1.5rem 0; justify-content: center; }
+  .dot-spin { display: flex; gap: 4px; }
+  .dot-spin span { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: bounce 0.9s infinite; }
   .dot-spin span:nth-child(2) { animation-delay: 0.15s; }
   .dot-spin span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.6; } 40% { transform: translateY(-6px); opacity: 1; } }
 
-  @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
-    40% { transform: translateY(-6px); opacity: 1; }
-  }
-
-  /* ── Session summary ── */
-  #summary-panel {
-    display: none;
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-
-  .summary-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 600;
-  }
-
-  .summary-score {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 64px;
-    font-weight: 600;
-    color: var(--amber);
-  }
-
+  /* ── Summary ── */
+  #summary-panel { display: none; flex-direction: column; gap: 16px; text-align: center; }
+  .summary-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; }
+  .summary-score { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 600; color: var(--amber); }
   .summary-label { font-size: 13px; color: var(--muted); margin-top: -10px; }
-
-  .history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    text-align: left;
-    max-height: 280px;
-    overflow-y: auto;
-  }
-
-  .history-item {
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--paper);
-  }
-
+  .history-list { display: flex; flex-direction: column; gap: 8px; text-align: left; max-height: 300px; overflow-y: auto; }
+  .history-item { padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--paper); }
   .history-item .q { font-size: 13px; color: var(--ink); margin-bottom: 4px; }
   .history-item .a { font-size: 12px; }
+  .history-item .diff-tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-left: 6px; font-weight: 500; vertical-align: middle; }
   .history-item.pass .a { color: var(--green); }
   .history-item.fail .a { color: var(--red); }
-
-  /* ── Status bar ── */
-  .status-bar {
-    font-size: 12px;
-    color: var(--muted);
-    text-align: center;
-    min-height: 18px;
-  }
 </style>
 </head>
 <body>
@@ -549,122 +230,126 @@
 
 <div class="app">
 
-  <!-- SETUP -->
+  <!-- ══ SETUP ══ -->
   <div class="card" id="setup-panel">
-    <div class="card-label">Your Book Text</div>
-    <textarea id="book-text" placeholder="Paste your book or any text here…&#10;&#10;The app will read it aloud, then pause every few sentences to ask you questions about what was just read. Stay sharp!">It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him.
+    <div class="card-label">Load Your Book</div>
 
-The hallway smelt of boiled cabbage and old rag mats. At one end of it a coloured poster, too large for the hallway, had been tacked to the wall. It depicted simply an enormous face, more than a metre wide: the face of a man of about forty-five, with a heavy black moustache and ruggedly handsome features.
+    <div class="file-zone" id="file-zone" onclick="document.getElementById('file-input').click()">
+      <div class="fz-icon">📖</div>
+      <h3>Drop your book file here</h3>
+      <p>Click to browse or drag and drop</p>
+      <div class="file-types">Supports: .txt · Any plain text file · Large books welcome</div>
+    </div>
+    <input type="file" id="file-input" accept=".txt,.text,text/plain" onchange="handleFileUpload(event)"/>
 
-Winston made for the stairs. It was no use trying the lift. Even at the best of times it was seldom working, and at present the electric current was cut off during daylight hours. It was part of the economy drive in preparation for Hate Week.
+    <div class="loaded-banner" id="loaded-banner">
+      <span>✓</span>
+      <span id="loaded-info">File loaded</span>
+      <button class="btn-ghost" style="margin-left:auto;padding:4px 12px;font-size:12px;" onclick="clearFile()">Clear</button>
+    </div>
 
-He was a member of the Outer Party and held a job at the Ministry of Truth, where his work was to rewrite historical records so they agreed with current political doctrine. He was thirty-nine years old and lived alone in a small flat.</textarea>
+    <div class="or-divider">or paste text directly</div>
 
-    <div class="controls-row">
+    <textarea id="book-text" placeholder="Paste your book text here…&#10;&#10;The app detects chapter headings automatically. For titled chapters it pauses at the end of each chapter. For untitled sections it pauses every 15 minutes. Difficulty adapts to your quiz performance."></textarea>
+
+    <div class="controls-grid">
       <div class="ctrl">
         <label>Voice</label>
-        <select id="voice-select"><option>Loading…</option></select>
+        <select id="voice-select"><option>Loading voices…</option></select>
       </div>
       <div class="ctrl">
         <label>Reading Speed</label>
         <select id="rate-select">
-          <option value="0.8">Slow (0.8×)</option>
+          <option value="0.75">Slow (0.75×)</option>
           <option value="1" selected>Normal (1×)</option>
           <option value="1.3">Fast (1.3×)</option>
           <option value="1.6">Very Fast (1.6×)</option>
         </select>
       </div>
-      <div class="ctrl">
-        <label>Quiz Difficulty</label>
-        <select id="difficulty-select">
-          <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-      </div>
     </div>
 
-    <div class="interval-row">
-      <label>Quiz every</label>
-      <input type="range" id="interval-slider" min="2" max="10" value="4" step="1"
-             oninput="document.getElementById('interval-val').textContent = this.value + ' sentences'"/>
-      <span class="interval-val" id="interval-val">4 sentences</span>
+    <div class="toggle-row">
+      <div class="toggle on" id="highlight-toggle" onclick="toggleHighlight()"></div>
+      <label onclick="toggleHighlight()">Highlight words while reading</label>
     </div>
 
-    <div style="display:flex; gap:10px; align-items:center;">
-      <button class="btn-primary" id="start-btn" onclick="startReading()">▶ Start Reading</button>
-      <div class="status-bar" id="setup-status">Choose your settings and press Start.</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn-primary" onclick="startReading()">▶ Start Reading</button>
+      <div class="status-bar" id="setup-status" style="text-align:left;">Load a file or paste text, then press Start.</div>
     </div>
   </div>
 
-  <!-- PLAYER -->
-  <div class="card" id="player-panel" style="display:none; flex-direction:column; gap:16px;">
-    <div class="card-label" id="player-label">Now Reading</div>
+  <!-- ══ PLAYER ══ -->
+  <div class="card" id="player-panel" style="display:none;flex-direction:column;gap:16px;">
 
-    <div class="book-display" id="book-display"></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div class="chapter-header" id="chapter-header">Loading…</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+        <div class="diff-badge easy" id="diff-badge">Easy</div>
+        <span class="diff-trend" id="diff-trend"></span>
+      </div>
+    </div>
+
+    <div class="book-display highlights" id="book-display"></div>
 
     <div class="progress-wrap">
       <div class="progress-meta">
-        <span id="progress-text">0%</span>
-        <span id="quiz-count-label">0 quizzes so far</span>
+        <span id="progress-text">0% through book</span>
+        <span id="chapter-label"></span>
       </div>
       <div class="progress-bar-bg" id="progress-bg">
         <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
       </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px;">
+        <span id="time-elapsed">0:00 elapsed</span>
+        <span id="quiz-count-lbl">No quizzes yet</span>
+        <span id="time-remain">Calculating…</span>
+      </div>
     </div>
 
     <div class="stats-row">
-      <div class="stat-chip">
-        <div class="num" id="stat-correct">0</div>
-        <div class="lbl">Correct</div>
-      </div>
-      <div class="stat-chip">
-        <div class="num" id="stat-total">0</div>
-        <div class="lbl">Questions</div>
-      </div>
-      <div class="stat-chip">
-        <div class="num" id="stat-pct">—</div>
-        <div class="lbl">Score</div>
-      </div>
+      <div class="stat-chip"><div class="num" id="stat-correct">0</div><div class="lbl">Correct</div></div>
+      <div class="stat-chip"><div class="num" id="stat-total">0</div><div class="lbl">Asked</div></div>
+      <div class="stat-chip"><div class="num" id="stat-streak">0</div><div class="lbl">Streak</div></div>
+      <div class="stat-chip"><div class="num" id="stat-pct">—</div><div class="lbl">Score</div></div>
     </div>
 
     <div class="playback-controls">
       <button class="btn-icon" title="Restart" onclick="restartReading()">↩</button>
       <button class="btn-play-main" id="play-btn" onclick="togglePlay()">▶</button>
-      <button class="btn-icon" title="Stop & summarise" onclick="finishSession()">■</button>
+      <button class="btn-icon" title="End session" onclick="finishSession()" style="font-size:12px;">■</button>
       <span class="speed-badge" id="speed-badge" onclick="cycleSpeed()">1×</span>
     </div>
 
     <div class="status-bar" id="player-status">Press play to begin…</div>
   </div>
 
-  <!-- SUMMARY -->
-  <div class="card" id="summary-panel" style="display:none; flex-direction:column; gap:16px; text-align:center;">
+  <!-- ══ SUMMARY ══ -->
+  <div class="card" id="summary-panel" style="display:none;flex-direction:column;gap:16px;text-align:center;">
     <div class="summary-title">Session Complete</div>
     <div class="summary-score" id="sum-score">0/0</div>
     <div class="summary-label" id="sum-label">questions answered correctly</div>
-    <div style="border-top: 1px solid var(--border); padding-top: 14px; text-align:left;">
+    <div style="border-top:1px solid var(--border);padding-top:14px;text-align:left;">
       <div class="card-label" style="margin-bottom:10px;">Quiz History</div>
       <div class="history-list" id="history-list"></div>
     </div>
-    <div style="display:flex; gap:10px; justify-content:center;">
-      <button class="btn-primary" onclick="resetApp()">Start New Session</button>
-    </div>
+    <button class="btn-primary" onclick="resetApp()">Start New Session</button>
   </div>
 
 </div>
 
-<!-- QUIZ OVERLAY -->
+<!-- ══ QUIZ OVERLAY ══ -->
 <div id="quiz-overlay">
-  <div class="quiz-box" id="quiz-box">
+  <div class="quiz-box">
     <div class="generating" id="quiz-loading">
       <div class="dot-spin"><span></span><span></span><span></span></div>
       Generating question…
     </div>
     <div id="quiz-content" style="display:none;">
       <div class="quiz-header">
-        <span class="quiz-badge">Quick Check</span>
+        <span class="quiz-badge easy" id="quiz-badge">Easy</span>
         <span class="quiz-num" id="quiz-num">#1</span>
+        <span class="diff-trend" id="quiz-trend" style="margin-left:4px;"></span>
       </div>
       <div class="quiz-question" id="quiz-question"></div>
       <div class="quiz-options" id="quiz-options"></div>
@@ -678,36 +363,67 @@ He was a member of the Outer Party and held a job at the Ministry of Truth, wher
 </div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
 const synth = window.speechSynthesis;
 let voices = [];
-let words = [];
-let sentences = [];
+
+// Book structure
+let chapters = [];       // [{title, sentences:[], hasTitle}]
+let allSentences = [];   // [{text, chapterIdx}]
+let totalWords = 0;
+
+// Playback
 let currentSentenceIdx = 0;
-let intervalCount = 0;
-let quizInterval = 4;
+let currentChapterIdx = 0;
 let isPlaying = false;
 let isPaused = false;
-let quizOpen = false;
-let pendingQuizBuffer = '';
+let currentUtterance = null;
+let speedValues = [0.75, 1, 1.3, 1.6];
+let speedLabels = ['0.75×', '1×', '1.3×', '1.6×'];
+let speedIdx = 1;
+
+// Quiz trigger
+// For titled chapters: quiz at chapter end.
+// For untitled: quiz every ~15 reading-minutes (estimated by word count / wpm).
+const PAUSE_WPM_THRESHOLD_MINS = 15;
+let sectionBuffer = '';
+let sectionWordCount = 0;
+
+// Stats & difficulty
 let totalQuestions = 0;
 let correctAnswers = 0;
+let currentStreak = 0;
+let recentResults = []; // rolling last-5
 let quizHistory = [];
-let currentUtterance = null;
-let speedValues = [0.7, 1, 1.3, 1.6];
-let speedLabels = ['0.7×', '1×', '1.3×', '1.6×'];
-let speedIdx = 1;
-let wordEls = [];
-let sentenceWordRanges = [];
+// 0=easy 1=medium 2=hard
+let difficultyLevel = 0;
+const DIFF_NAMES = ['easy','medium','hard'];
+const DIFF_LABELS = ['Easy','Medium','Hard'];
 
-// ── Voice loading ──
+// Highlights
+let highlightsEnabled = true;
+
+// Timer
+let sessionElapsedSecs = 0;
+let timerInterval = null;
+
+// Word display
+let wordEls = [];
+let sentenceWordRanges = []; // [{start, end}] global word indices
+
+// ═══════════════════════════════════════════════════════
+//  VOICES
+// ═══════════════════════════════════════════════════════
 function loadVoices() {
   voices = synth.getVoices();
   if (!voices.length) return;
   const sel = document.getElementById('voice-select');
   sel.innerHTML = '';
   const en = voices.filter(v => v.lang.startsWith('en'));
-  const others = voices.filter(v => !v.lang.startsWith('en'));
-  [...en, ...others].forEach((v, i) => {
+  const rest = voices.filter(v => !v.lang.startsWith('en'));
+  [...en, ...rest].forEach((v, i) => {
     const o = document.createElement('option');
     o.value = i;
     o.textContent = v.name + ' (' + v.lang + ')';
@@ -717,108 +433,274 @@ function loadVoices() {
 synth.onvoiceschanged = loadVoices;
 loadVoices();
 
-// ── Start ──
-function startReading() {
-  const raw = document.getElementById('book-text').value.trim();
-  if (!raw) { document.getElementById('setup-status').textContent = 'Please paste some text first.'; return; }
+// ═══════════════════════════════════════════════════════
+//  FILE HANDLING
+// ═══════════════════════════════════════════════════════
+const fz = document.getElementById('file-zone');
+fz.addEventListener('dragover', e => { e.preventDefault(); fz.classList.add('drag'); });
+fz.addEventListener('dragleave', () => fz.classList.remove('drag'));
+fz.addEventListener('drop', e => {
+  e.preventDefault(); fz.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) readFile(f);
+});
 
-  quizInterval = parseInt(document.getElementById('interval-slider').value);
-  speedIdx = ['0.8','1','1.3','1.6'].indexOf(document.getElementById('rate-select').value);
-  if (speedIdx < 0) speedIdx = 1;
-  speedValues = [0.7, 1, 1.3, 1.6];
+function handleFileUpload(e) { const f = e.target.files[0]; if (f) readFile(f); }
 
-  // Tokenise
-  sentences = tokeniseSentences(raw);
-  buildWordDisplay(raw);
-
-  currentSentenceIdx = 0;
-  intervalCount = 0;
-  totalQuestions = 0;
-  correctAnswers = 0;
-  quizHistory = [];
-  pendingQuizBuffer = '';
-
-  updateStats();
-  document.getElementById('setup-panel').style.display = 'none';
-  document.getElementById('player-panel').style.display = 'flex';
-  document.getElementById('speed-badge').textContent = speedLabels[speedIdx];
-
-  isPlaying = true;
-  isPaused = false;
-  document.getElementById('play-btn').textContent = '⏸';
-  speakNext();
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const text = ev.target.result;
+    document.getElementById('book-text').value = text;
+    const wc = text.split(/\s+/).filter(Boolean).length;
+    const kb = Math.round(file.size / 1024);
+    document.getElementById('loaded-info').textContent =
+      '"' + file.name + '" — ' + wc.toLocaleString() + ' words (' + kb + ' KB)';
+    document.getElementById('loaded-banner').classList.add('show');
+    document.getElementById('setup-status').textContent = 'Book loaded! Press Start when ready.';
+  };
+  reader.readAsText(file);
 }
 
-function tokeniseSentences(text) {
-  const parts = text.match(/[^.!?\n]+[.!?\n]+|[^.!?\n]+$/g) || [text];
-  return parts.map(s => s.trim()).filter(Boolean);
+function clearFile() {
+  document.getElementById('book-text').value = '';
+  document.getElementById('loaded-banner').classList.remove('show');
+  document.getElementById('file-input').value = '';
+  document.getElementById('setup-status').textContent = 'Cleared. Paste text or upload a file.';
 }
 
-function buildWordDisplay(raw) {
+// ═══════════════════════════════════════════════════════
+//  HIGHLIGHT TOGGLE
+// ═══════════════════════════════════════════════════════
+function toggleHighlight() {
+  highlightsEnabled = !highlightsEnabled;
+  document.getElementById('highlight-toggle').classList.toggle('on', highlightsEnabled);
+  const bd = document.getElementById('book-display');
+  bd.classList.toggle('highlights', highlightsEnabled);
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOK PARSING
+// ═══════════════════════════════════════════════════════
+const CHAPTER_KEYWORD_RE = /^(chapter|part|book|section|prologue|epilogue|preface|introduction|conclusion|appendix)\b/i;
+const ROMAN_NUMERAL_RE   = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\.\s*$/i;
+
+function looksLikeHeading(line, nextLine) {
+  if (!line || line.length > 100) return false;
+  if (CHAPTER_KEYWORD_RE.test(line)) return true;
+  if (ROMAN_NUMERAL_RE.test(line.trim())) return true;
+  // Short ALL-CAPS or Title Case line not ending with punctuation
+  const noEndPunct = !/[.!?,;]$/.test(line.trim());
+  const shortEnough = line.trim().length < 80;
+  const titleCase = /^[A-Z]/.test(line) && line === line.replace(/\b\w/g, c => c.toUpperCase()) && !/\s{2,}/.test(line);
+  const allCaps = line === line.toUpperCase() && /[A-Z]/.test(line);
+  const hasNextContent = nextLine && nextLine.trim().length > 0;
+  if (noEndPunct && shortEnough && (titleCase || allCaps) && hasNextContent) return true;
+  return false;
+}
+
+function parseBook(text) {
+  const lines = text.split('\n');
+  const chapters = [];
+  let cur = { title: '', sentences: [], hasTitle: false };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const next = lines.slice(i + 1).find(l => l.trim()) || '';
+
+    if (looksLikeHeading(line, next)) {
+      if (cur.sentences.length > 0) {
+        chapters.push(cur);
+        cur = { title: line, sentences: [], hasTitle: true };
+      } else {
+        cur.title = line;
+        cur.hasTitle = true;
+      }
+    } else {
+      // Split line into sentences
+      const sents = (line.match(/[^.!?…]+[.!?…]+|[^.!?…]+$/g) || [line]);
+      sents.forEach(s => { const t = s.trim(); if (t.length > 1) cur.sentences.push(t); });
+    }
+  }
+  if (cur.sentences.length) chapters.push(cur);
+
+  // Fallback: treat whole text as one chapter
+  if (!chapters.length) {
+    const sents = (text.match(/[^.!?…\n]+[.!?…\n]+|[^.!?…\n]+$/g) || [text]).map(s => s.trim()).filter(Boolean);
+    return [{ title: 'Book', sentences: sents, hasTitle: false }];
+  }
+  return chapters;
+}
+
+function buildFlatList(chaps) {
+  const flat = [];
+  chaps.forEach((ch, ci) => ch.sentences.forEach(s => flat.push({ text: s, chapterIdx: ci })));
+  return flat;
+}
+
+// ═══════════════════════════════════════════════════════
+//  WORD DISPLAY
+// ═══════════════════════════════════════════════════════
+function buildWordDisplay() {
   const container = document.getElementById('book-display');
   container.innerHTML = '';
   wordEls = [];
   sentenceWordRanges = [];
-
-  let globalIdx = 0;
-  sentences.forEach((sent, si) => {
-    const ws = sent.split(/\s+/).filter(Boolean);
-    const start = globalIdx;
+  let gi = 0;
+  allSentences.forEach(sent => {
+    const ws = sent.text.split(/\s+/).filter(Boolean);
+    const start = gi;
     ws.forEach(w => {
       const span = document.createElement('span');
       span.className = 'word';
       span.textContent = w + ' ';
-      span.dataset.idx = globalIdx;
       container.appendChild(span);
       wordEls.push(span);
-      globalIdx++;
+      gi++;
     });
-    sentenceWordRanges.push({ start, end: globalIdx - 1 });
+    sentenceWordRanges.push({ start, end: gi - 1 });
+  });
+  totalWords = gi;
+}
+
+// ═══════════════════════════════════════════════════════
+//  START
+// ═══════════════════════════════════════════════════════
+function startReading() {
+  const raw = document.getElementById('book-text').value.trim();
+  if (!raw) { document.getElementById('setup-status').textContent = 'Please load or paste a book first.'; return; }
+
+  const rateVal = parseFloat(document.getElementById('rate-select').value);
+  speedIdx = speedValues.indexOf(rateVal);
+  if (speedIdx < 0) speedIdx = 1;
+
+  chapters = parseBook(raw);
+  allSentences = buildFlatList(chapters);
+  if (!allSentences.length) { document.getElementById('setup-status').textContent = 'Could not parse any text.'; return; }
+
+  buildWordDisplay();
+  document.getElementById('book-display').classList.toggle('highlights', highlightsEnabled);
+
+  // Reset all state
+  currentSentenceIdx = 0; currentChapterIdx = 0;
+  totalQuestions = 0; correctAnswers = 0; currentStreak = 0;
+  recentResults = []; quizHistory = []; difficultyLevel = 0;
+  sectionBuffer = ''; sectionWordCount = 0;
+  sessionElapsedSecs = 0;
+
+  updateDiffBadge();
+  updateStats();
+  updateChapterTicks();
+  updateChapterHeader();
+
+  document.getElementById('setup-panel').style.display = 'none';
+  document.getElementById('player-panel').style.display = 'flex';
+  document.getElementById('speed-badge').textContent = speedLabels[speedIdx];
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tickTimer, 1000);
+
+  isPlaying = true; isPaused = false;
+  document.getElementById('play-btn').textContent = '⏸';
+  setPlayerStatus('');
+  speakNext();
+}
+
+function updateChapterTicks() {
+  const bg = document.getElementById('progress-bg');
+  bg.querySelectorAll('.chapter-tick').forEach(e => e.remove());
+  if (chapters.length <= 1) return;
+  let cumWords = 0;
+  chapters.forEach((ch, ci) => {
+    const chWords = ch.sentences.reduce((a, s) => a + s.split(/\s+/).filter(Boolean).length, 0);
+    if (ci > 0) {
+      const pct = Math.min(99, Math.round(cumWords / Math.max(1, totalWords) * 100));
+      const tick = document.createElement('div');
+      tick.className = 'chapter-tick';
+      tick.style.left = pct + '%';
+      tick.title = ch.title || ('Section ' + (ci + 1));
+      bg.appendChild(tick);
+    }
+    cumWords += chWords;
   });
 }
 
-// ── Speak ──
+// ═══════════════════════════════════════════════════════
+//  SPEAK ENGINE
+// ═══════════════════════════════════════════════════════
+function wpmForSpeed() { return [100, 135, 175, 215][speedIdx]; }
+
+function wordsForPauseInterval() {
+  // 15 minutes worth of words at current speed
+  return PAUSE_WPM_THRESHOLD_MINS * wpmForSpeed();
+}
+
 function speakNext() {
-  if (!isPlaying || currentSentenceIdx >= sentences.length) {
-    if (currentSentenceIdx >= sentences.length) finishSession();
+  if (!isPlaying || currentSentenceIdx >= allSentences.length) {
+    if (currentSentenceIdx >= allSentences.length) finishSession();
     return;
   }
 
-  const sent = sentences[currentSentenceIdx];
-  pendingQuizBuffer += ' ' + sent;
+  const sentObj = allSentences[currentSentenceIdx];
+
+  // Chapter transition
+  if (sentObj.chapterIdx !== currentChapterIdx) {
+    currentChapterIdx = sentObj.chapterIdx;
+    updateChapterHeader();
+  }
+
+  const sentWords = sentObj.text.split(/\s+/).filter(Boolean).length;
+  sectionBuffer += ' ' + sentObj.text;
+  sectionWordCount += sentWords;
 
   highlightSentence(currentSentenceIdx);
   updateProgress();
 
-  const u = new SpeechSynthesisUtterance(sent);
+  const u = new SpeechSynthesisUtterance(sentObj.text);
   u.voice = getVoice();
   u.rate = speedValues[speedIdx];
-  u.pitch = 1;
-  u.volume = 1;
+  u.pitch = 1; u.volume = 1;
 
-  u.onboundary = (e) => {
-    if (e.name === 'word') {
-      highlightWordByCharOffset(currentSentenceIdx, e.charIndex);
-    }
-  };
+  if (highlightsEnabled) {
+    u.onboundary = e => { if (e.name === 'word') highlightWordByChar(currentSentenceIdx, e.charIndex); };
+  }
 
   u.onend = () => {
     if (!isPlaying) return;
-    markSentenceSpoken(currentSentenceIdx);
+    markSpoken(currentSentenceIdx);
+    const finishedIdx = currentSentenceIdx;
     currentSentenceIdx++;
-    intervalCount++;
 
-    if (intervalCount >= quizInterval && currentSentenceIdx < sentences.length) {
-      intervalCount = 0;
-      const buf = pendingQuizBuffer.trim();
-      pendingQuizBuffer = '';
+    const finishedChapIdx = allSentences[finishedIdx].chapterIdx;
+    const nextChapIdx = currentSentenceIdx < allSentences.length
+      ? allSentences[currentSentenceIdx].chapterIdx : -1;
+    const chapterEnded = nextChapIdx !== finishedChapIdx;
+    const chapHasTitle = chapters[finishedChapIdx]?.hasTitle;
+
+    // Quiz trigger logic
+    let shouldQuiz = false;
+    if (chapHasTitle && chapterEnded) {
+      // Titled chapter: quiz at end of every chapter
+      shouldQuiz = true;
+    } else if (!chapHasTitle && sectionWordCount >= wordsForPauseInterval()) {
+      // Untitled: quiz every ~15 reading minutes
+      shouldQuiz = true;
+    } else if (!chapHasTitle && chapterEnded && sectionWordCount > 200) {
+      // Untitled chapter boundary still triggers if we have enough content
+      shouldQuiz = true;
+    }
+
+    if (shouldQuiz && sectionBuffer.trim().length > 80) {
+      const buf = sectionBuffer.trim();
+      sectionBuffer = ''; sectionWordCount = 0;
       pauseForQuiz(buf);
     } else {
       speakNext();
     }
   };
 
-  u.onerror = (e) => { if (e.error !== 'interrupted') setPlayerStatus('Speech error: ' + e.error); };
+  u.onerror = e => { if (e.error !== 'interrupted' && e.error !== 'canceled') setPlayerStatus('Speech error: ' + e.error); };
   currentUtterance = u;
   synth.speak(u);
 }
@@ -829,74 +711,91 @@ function getVoice() {
   return voices[idx] || voices.find(v => v.lang.startsWith('en')) || null;
 }
 
+// ═══════════════════════════════════════════════════════
+//  HIGHLIGHTS
+// ═══════════════════════════════════════════════════════
 function highlightSentence(si) {
-  const range = sentenceWordRanges[si];
-  if (!range) return;
-  wordEls.forEach((el, i) => {
-    if (i >= range.start && i <= range.end) el.classList.add('current');
-    else el.classList.remove('current');
-  });
-  // scroll into view
-  const first = wordEls[range.start];
-  if (first) first.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  if (!highlightsEnabled) return;
+  const r = sentenceWordRanges[si]; if (!r) return;
+  wordEls.forEach((el, i) => el.classList.toggle('current', i >= r.start && i <= r.end));
+  wordEls[r.start]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
-function highlightWordByCharOffset(si, charIdx) {
-  const range = sentenceWordRanges[si];
-  if (!range) return;
-  const sent = sentences[si];
-  const wordsInSent = sent.split(/\s+/).filter(Boolean);
-  let cumLen = 0;
-  for (let i = 0; i < wordsInSent.length; i++) {
-    cumLen += wordsInSent[i].length + 1;
-    if (cumLen > charIdx) {
-      const globalIdx = range.start + i;
+function highlightWordByChar(si, charIdx) {
+  if (!highlightsEnabled) return;
+  const r = sentenceWordRanges[si]; if (!r) return;
+  const ws = allSentences[si].text.split(/\s+/).filter(Boolean);
+  let cum = 0;
+  for (let i = 0; i < ws.length; i++) {
+    cum += ws[i].length + 1;
+    if (cum > charIdx) {
+      const gi = r.start + i;
       wordEls.forEach((el, idx) => {
-        el.classList.toggle('current', idx === globalIdx);
-        if (idx < globalIdx && idx >= range.start) el.classList.add('spoken');
+        el.classList.toggle('current', idx === gi);
+        if (idx < gi && idx >= r.start) el.classList.add('spoken');
       });
       break;
     }
   }
 }
 
-function markSentenceSpoken(si) {
-  const range = sentenceWordRanges[si];
-  if (!range) return;
-  for (let i = range.start; i <= range.end; i++) {
+function markSpoken(si) {
+  const r = sentenceWordRanges[si]; if (!r) return;
+  for (let i = r.start; i <= r.end; i++) {
     wordEls[i]?.classList.remove('current');
-    wordEls[i]?.classList.add('spoken');
+    if (highlightsEnabled) wordEls[i]?.classList.add('spoken');
   }
 }
 
+// ═══════════════════════════════════════════════════════
+//  PROGRESS + TIMER
+// ═══════════════════════════════════════════════════════
 function updateProgress() {
-  const pct = Math.round((currentSentenceIdx / Math.max(1, sentences.length)) * 100);
+  const wordsRead = sentenceWordRanges[currentSentenceIdx]?.start ?? totalWords;
+  const pct = Math.min(100, Math.round(wordsRead / Math.max(1, totalWords) * 100));
   document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-text').textContent = pct + '%';
-  document.getElementById('quiz-count-label').textContent = totalQuestions + ' quiz' + (totalQuestions !== 1 ? 'zes' : '') + ' so far';
+  document.getElementById('progress-text').textContent = pct + '% through book';
+
+  const ci = allSentences[currentSentenceIdx]?.chapterIdx ?? currentChapterIdx;
+  const chapTitle = chapters[ci]?.title;
+  document.getElementById('chapter-label').textContent = chapTitle || '';
+
+  const wordsLeft = totalWords - wordsRead;
+  const minsLeft = Math.ceil(wordsLeft / wpmForSpeed());
+  document.getElementById('time-remain').textContent = formatMins(minsLeft) + ' remaining';
+  document.getElementById('quiz-count-lbl').textContent =
+    totalQuestions ? totalQuestions + ' quiz' + (totalQuestions !== 1 ? 'zes' : '') + ' so far' : 'No quizzes yet';
 }
 
-function updateStats() {
-  document.getElementById('stat-correct').textContent = correctAnswers;
-  document.getElementById('stat-total').textContent = totalQuestions;
-  document.getElementById('stat-pct').textContent = totalQuestions ? Math.round(correctAnswers / totalQuestions * 100) + '%' : '—';
+function updateChapterHeader() {
+  document.getElementById('chapter-header').textContent = chapters[currentChapterIdx]?.title || 'Reading…';
 }
 
-// ── Controls ──
+function tickTimer() {
+  if (!isPlaying || isPaused) return;
+  sessionElapsedSecs++;
+  const m = Math.floor(sessionElapsedSecs / 60), s = sessionElapsedSecs % 60;
+  document.getElementById('time-elapsed').textContent = m + ':' + String(s).padStart(2, '0') + ' elapsed';
+}
+
+function formatMins(m) {
+  if (m < 1) return '< 1 min';
+  if (m < 60) return m + ' min';
+  return Math.floor(m / 60) + 'h ' + (m % 60) + 'm';
+}
+
+// ═══════════════════════════════════════════════════════
+//  PLAYBACK CONTROLS
+// ═══════════════════════════════════════════════════════
 function togglePlay() {
-  if (quizOpen) return;
   if (isPlaying && !isPaused) {
-    synth.pause();
-    isPaused = true;
-    isPlaying = false;
+    synth.pause(); isPaused = true; isPlaying = false;
     document.getElementById('play-btn').textContent = '▶';
     setPlayerStatus('Paused.');
   } else if (isPaused) {
-    synth.resume();
-    isPaused = false;
-    isPlaying = true;
+    synth.resume(); isPaused = false; isPlaying = true;
     document.getElementById('play-btn').textContent = '⏸';
-    setPlayerStatus('Resuming…');
+    setPlayerStatus('');
   } else {
     isPlaying = true;
     document.getElementById('play-btn').textContent = '⏸';
@@ -905,14 +804,11 @@ function togglePlay() {
 }
 
 function restartReading() {
-  synth.cancel();
-  isPlaying = false;
-  isPaused = false;
-  currentSentenceIdx = 0;
-  intervalCount = 0;
-  pendingQuizBuffer = '';
-  wordEls.forEach(el => { el.classList.remove('current', 'spoken'); });
-  updateProgress();
+  synth.cancel(); isPlaying = false; isPaused = false;
+  currentSentenceIdx = 0; currentChapterIdx = 0;
+  sectionBuffer = ''; sectionWordCount = 0;
+  wordEls.forEach(el => el.classList.remove('current', 'spoken'));
+  updateProgress(); updateChapterHeader();
   document.getElementById('play-btn').textContent = '▶';
   setPlayerStatus('Restarted. Press play.');
 }
@@ -920,92 +816,113 @@ function restartReading() {
 function cycleSpeed() {
   speedIdx = (speedIdx + 1) % speedValues.length;
   document.getElementById('speed-badge').textContent = speedLabels[speedIdx];
-  if (isPlaying) {
-    synth.cancel();
-    speakNext();
-  }
+  if (isPlaying) { synth.cancel(); speakNext(); }
 }
 
-function setPlayerStatus(msg) {
-  document.getElementById('player-status').textContent = msg;
+function setPlayerStatus(msg) { document.getElementById('player-status').textContent = msg; }
+
+// ═══════════════════════════════════════════════════════
+//  ADAPTIVE DIFFICULTY
+// ═══════════════════════════════════════════════════════
+function recordResult(correct) {
+  recentResults.push(correct);
+  if (recentResults.length > 5) recentResults.shift();
+  const n = recentResults.length;
+  if (n < 3) return 'same';
+  const sum = recentResults.filter(Boolean).length;
+  if (sum / n >= 0.8 && difficultyLevel < 2) { difficultyLevel++; return 'up'; }
+  if (sum / n <= 0.2 && difficultyLevel > 0) { difficultyLevel--; return 'down'; }
+  return 'same';
 }
 
-// ── Quiz ──
-async function pauseForQuiz(textBuffer) {
+function updateDiffBadge() {
+  const b = document.getElementById('diff-badge');
+  b.textContent = DIFF_LABELS[difficultyLevel];
+  b.className = 'diff-badge ' + DIFF_NAMES[difficultyLevel];
+}
+
+// ═══════════════════════════════════════════════════════
+//  QUIZ
+// ═══════════════════════════════════════════════════════
+async function pauseForQuiz(buffer) {
   isPlaying = false;
-  quizOpen = true;
   document.getElementById('play-btn').textContent = '▶';
-  setPlayerStatus('Pausing for a quick question…');
+  setPlayerStatus('Pausing for a comprehension check…');
 
   document.getElementById('quiz-overlay').classList.add('active');
   document.getElementById('quiz-loading').style.display = 'flex';
   document.getElementById('quiz-content').style.display = 'none';
 
   totalQuestions++;
-  const qNum = totalQuestions;
-  document.getElementById('quiz-num').textContent = '#' + qNum;
+  document.getElementById('quiz-num').textContent = '#' + totalQuestions;
+  document.getElementById('quiz-trend').textContent = '';
 
-  const difficulty = document.getElementById('difficulty-select').value;
+  const diff = DIFF_NAMES[difficultyLevel];
+  const qb = document.getElementById('quiz-badge');
+  qb.textContent = DIFF_LABELS[difficultyLevel];
+  qb.className = 'quiz-badge ' + diff;
 
   let quizData;
-  try {
-    quizData = await generateQuestion(textBuffer, difficulty);
-  } catch(e) {
-    quizData = fallbackQuestion(textBuffer);
-  }
+  try { quizData = await generateQuestion(buffer, diff); }
+  catch(e) { quizData = fallbackQuestion(); }
 
-  renderQuiz(quizData, textBuffer);
+  window._curQuiz = quizData;
+  renderQuiz(quizData);
 }
 
 async function generateQuestion(passage, difficulty) {
-  const prompt = `You are a reading comprehension quiz master. Based on the following passage, generate a single multiple-choice question to test the reader's attention.
+  const maxChars = 7000;
+  const p = passage.length > maxChars ? passage.slice(-maxChars) : passage;
+
+  const prompt = `You are a reading comprehension quiz master. The user just listened to the following passage from an audiobook. Generate exactly one multiple-choice question to test how attentively they listened.
 
 Difficulty: ${difficulty}
-- Easy: ask about obvious facts directly stated
-- Medium: ask about implications or character actions
-- Hard: ask about subtle details, tone, or meaning
+- easy: a clear fact or event stated directly in the passage
+- medium: a character motivation, implication, or cause-and-effect
+- hard: a subtle detail, tone, inference, or something easy to miss
+
+Rules:
+- Question must be answerable from the passage alone
+- Wrong options must be plausible but clearly wrong to an attentive listener
+- Question must be under 25 words
+- Explanation must be one concise sentence
 
 Passage:
 """
-${passage}
+${p}
 """
 
-Respond ONLY with valid JSON (no markdown, no backticks), exactly this shape:
-{
-  "question": "...",
-  "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
-  "correct": 0,
-  "explanation": "Brief explanation of the correct answer."
-}
+Respond ONLY with raw JSON (no markdown, no backticks):
+{"question":"...","options":["A) ...","B) ...","C) ...","D) ..."],"correct":0,"explanation":"..."}
 
-The correct field is the 0-based index of the correct option.`;
+"correct" is the 0-based index of the right answer.`;
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 600,
+      max_tokens: 700,
       messages: [{ role: 'user', content: prompt }]
     })
   });
 
   const data = await resp.json();
-  const text = data.content.map(c => c.text || '').join('').trim();
-  const clean = text.replace(/```json|```/g, '').trim();
-  return JSON.parse(clean);
+  if (data.error) throw new Error(data.error.message);
+  const raw = data.content.map(c => c.text || '').join('').trim();
+  return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
-function fallbackQuestion(passage) {
+function fallbackQuestion() {
   return {
-    question: "Which of the following best describes what you just heard?",
-    options: ["A) A description of a place", "B) A character introduction", "C) A dramatic event", "D) A flashback"],
+    question: "Which best describes the main focus of what was just read?",
+    options: ["A) A description of setting", "B) A character introduction", "C) A key plot event", "D) A philosophical reflection"],
     correct: 0,
-    explanation: "Try to recall the main theme of the passage."
+    explanation: "General fallback — AI quiz generation was unavailable."
   };
 }
 
-function renderQuiz(data, passage) {
+function renderQuiz(data) {
   document.getElementById('quiz-loading').style.display = 'none';
   document.getElementById('quiz-content').style.display = 'block';
   document.getElementById('quiz-question').textContent = data.question;
@@ -1019,16 +936,12 @@ function renderQuiz(data, passage) {
     const btn = document.createElement('button');
     btn.className = 'quiz-option';
     btn.textContent = opt;
-    btn.onclick = () => answerQuestion(i, data, btn, container);
+    btn.onclick = () => answerQuestion(i, data, container);
     container.appendChild(btn);
   });
-
-  // store for history
-  window._currentQuizData = data;
-  window._currentPassage = passage;
 }
 
-function answerQuestion(chosen, data, btn, container) {
+function answerQuestion(chosen, data, container) {
   const correct = data.correct;
   const isCorrect = chosen === correct;
 
@@ -1040,14 +953,26 @@ function answerQuestion(chosen, data, btn, container) {
 
   document.getElementById('quiz-feedback').textContent = data.explanation;
 
-  if (isCorrect) correctAnswers++;
+  if (isCorrect) { correctAnswers++; currentStreak++; }
+  else currentStreak = 0;
+
+  const change = recordResult(isCorrect);
+  updateDiffBadge();
   updateStats();
+
+  let trendMsg = '';
+  if (change === 'up') trendMsg = '▲ Stepping up the difficulty!';
+  else if (change === 'down') trendMsg = '▼ Easing the difficulty.';
+  document.getElementById('quiz-trend').textContent = trendMsg;
+  document.getElementById('diff-trend').textContent = trendMsg;
 
   quizHistory.push({
     question: data.question,
     chosen: data.options[chosen],
     correct: data.options[correct],
-    pass: isCorrect
+    pass: isCorrect,
+    diffLevel: difficultyLevel,
+    change
   });
 
   document.getElementById('skip-btn').style.display = 'none';
@@ -1055,59 +980,75 @@ function answerQuestion(chosen, data, btn, container) {
 }
 
 function skipQuestion() {
+  currentStreak = 0;
+  recordResult(false);
+  updateDiffBadge();
   quizHistory.push({
-    question: window._currentQuizData?.question || '—',
+    question: window._curQuiz?.question || '—',
     chosen: 'Skipped',
-    correct: window._currentQuizData?.options[window._currentQuizData?.correct] || '—',
-    pass: false
+    correct: window._curQuiz?.options[window._curQuiz?.correct] || '—',
+    pass: false,
+    diffLevel: difficultyLevel,
+    change: 'same'
   });
   closeQuiz();
 }
 
 function closeQuiz() {
   document.getElementById('quiz-overlay').classList.remove('active');
-  quizOpen = false;
   isPlaying = true;
   document.getElementById('play-btn').textContent = '⏸';
-  setPlayerStatus('Resuming…');
+  setPlayerStatus('');
   updateStats();
   speakNext();
 }
 
-// ── Finish ──
+function updateStats() {
+  document.getElementById('stat-correct').textContent = correctAnswers;
+  document.getElementById('stat-total').textContent = totalQuestions;
+  document.getElementById('stat-streak').textContent = currentStreak;
+  document.getElementById('stat-pct').textContent =
+    totalQuestions ? Math.round(correctAnswers / totalQuestions * 100) + '%' : '—';
+}
+
+// ═══════════════════════════════════════════════════════
+//  FINISH / RESET
+// ═══════════════════════════════════════════════════════
 function finishSession() {
   synth.cancel();
-  isPlaying = false;
-  isPaused = false;
-  quizOpen = false;
+  clearInterval(timerInterval);
+  isPlaying = false; isPaused = false;
   document.getElementById('quiz-overlay').classList.remove('active');
-
   document.getElementById('player-panel').style.display = 'none';
   document.getElementById('summary-panel').style.display = 'flex';
 
   document.getElementById('sum-score').textContent = correctAnswers + '/' + totalQuestions;
-  document.getElementById('sum-label').textContent = 'questions answered correctly';
+  document.getElementById('sum-label').textContent =
+    'questions answered correctly · Final difficulty: ' + DIFF_LABELS[difficultyLevel];
 
   const list = document.getElementById('history-list');
   list.innerHTML = '';
   if (!quizHistory.length) {
-    list.innerHTML = '<div style="color:var(--muted); font-size:13px;">No quizzes were answered this session.</div>';
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px;">No quizzes completed this session.</div>';
   } else {
     quizHistory.forEach((h, i) => {
       const div = document.createElement('div');
       div.className = 'history-item ' + (h.pass ? 'pass' : 'fail');
-      div.innerHTML = `<div class="q"><strong>#${i+1}</strong> ${h.question}</div>
-        <div class="a">${h.pass ? '✓ Correct' : '✗ You chose: ' + h.chosen + ' — Correct: ' + h.correct}</div>`;
+      const dColor = h.diffLevel === 0 ? 'var(--green)' : h.diffLevel === 1 ? 'var(--amber-dark)' : 'var(--red)';
+      const dBg = h.diffLevel === 0 ? 'var(--green-light)' : h.diffLevel === 1 ? 'var(--amber-light)' : 'var(--red-light)';
+      div.innerHTML =
+        '<div class="q"><strong>#' + (i+1) + '</strong>' +
+        '<span class="diff-tag" style="background:' + dBg + ';color:' + dColor + '">' + DIFF_LABELS[h.diffLevel] + '</span> ' +
+        h.question + '</div>' +
+        '<div class="a">' + (h.pass ? '✓ Correct' : '✗ You chose: ' + h.chosen + ' — Correct: ' + h.correct) + '</div>';
       list.appendChild(div);
     });
   }
 }
 
 function resetApp() {
-  synth.cancel();
-  isPlaying = false;
-  isPaused = false;
-  quizOpen = false;
+  synth.cancel(); clearInterval(timerInterval);
+  isPlaying = false; isPaused = false; sessionElapsedSecs = 0;
   document.getElementById('summary-panel').style.display = 'none';
   document.getElementById('setup-panel').style.display = 'flex';
 }
